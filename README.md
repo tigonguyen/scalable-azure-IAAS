@@ -97,7 +97,6 @@ Structure of `terraform` directory:
 ```
 terraform
 |   main.tf
-|   tree.txt
 |   variables.tf
 |   
 \---modules
@@ -113,3 +112,5 @@ terraform
 Here, 2 modules have been includes:
 - `init` module defines `resource_group` and `network` configurations which are using entire the project.
 - `avset` modules defines components which make up an `availability_set`. You can decide how many instances place in your set via `vm_count` variables. Besides, `admin_username` and `admin_password`, which are used for authenticating on the VMs, are required to be configured.
+
+`./terraform/main.tf` contains 2 options that you can choose by yourselft, deploying entire project with secrets stored on `Vault` server or `./terraform/variables.tf` file.
