@@ -9,8 +9,9 @@ terraform {
   }
 }
 
-# module "azure_initialization" {
-#   source          = "./modules/initialization"
+# #### ---------- Uncomment following blocks if you store your secrets in variables.tf file ----------- ####
+# module "azure_init" {
+#   source          = "./modules/init"
 
 #   # Initial variables
 #   tenant_id       = var.tenant_id
@@ -18,9 +19,29 @@ terraform {
 #   user_id         = var.user_id
 #   user_secret     = var.user_secret
 #   rg_region       = "Southeast Asia"
+#   prefix          = "udacity_project"
 # }
 
-#### Uncomment the following script if you use Hashicorp Vault for storing your secrets ####
+# module "azure_avset" {
+#   source = "./modules/avset"
+
+#   # Initial variables
+#   tenant_id         = var.tenant_id
+#   subscription_id   = var.subscription_id
+#   user_id           = var.user_id
+#   user_secret       = var.user_secret
+#   rg_region         = "Southeast Asia"
+#   prefix            = "udacity_project"
+#   vm_count          = 3
+#   admin_username    = var.admin_username
+#   admin_password    = var.admin_password
+
+#   current_rg_name   = module.azure_init.current_rg_name
+#   current_rg_region = module.azure_init.current_rg_region
+#   current_nsg_id    = module.azure_init.current_nsg_id
+# }
+
+#### --------- Uncomment following blocks if you use Hashicorp Vault for storing your secrets ----------- ####
 # Configure the Hashicorp Vault provider
 provider "vault" {
   # It is strongly recommended to configure this provider through the
