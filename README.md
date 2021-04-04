@@ -62,16 +62,34 @@ These values map to the Terraform variables like so:
 - `tenant` is the `tenant_id` defined in Packer template.
 
 ### Deployment of tagging Policy
+
 ### Packer
 Create a resource group for containing `packer image`
 ```
 az group create --location southeastasia --name scalable-iaas
 ```
 Here, we have 2 cases:
-- If you have your own `Vault` server for storing secrets, you can use `web-server-vault.json` template for building the image. Rememmber, `VAULT_ADDR` and `VAULT_TOKEN` are required to be configured first.
+- If you have your own `Vault` server for storing secrets, you can use `web-server-vault.json` template for building image. Rememmber, `VAULT_ADDR` and `VAULT_TOKEN` are required to be configured first.
 ```
 ## On windows systems
 $env:VAULT_ADDR="<YOUR-VAULT-SERVER-ADDRESS>"
 $env:VAULT_TOKEN="<YOUR-ACCESS-TOKEN>"
 ```
-- You can set the 
+- You can set the secrets' value with environment variables as the replacement. Then using `web-server-env.json` template for building image.
+```
+## On windows systems
+$env:CLIENT_ID=<YOUR-CLIENT-ID>
+$env:CLIENT_SECRET=<YOUR-CLIENT-SECRET>
+$env:TENANT_ID=<YOUR-TENANT-ID>
+$env:SUBSCRIPTION_ID=<YOUR-SUBSCRIPTION-ID>
+```
+Then, use `packer` to build the image:
+```
+packer build <PATH-TO-JSON-TEMPLATE>
+```
+Finally, verify with CLI command:
+```
+az image list
+```
+
+### Terraform
