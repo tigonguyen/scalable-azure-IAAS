@@ -29,10 +29,18 @@ availability_set
 
 ## Instruction
 ### Clone the repository
-- `Fork` the Udacity repository from Github page.
-![Fork the repository](./images/fork_repos.png)
+Switch your browser to Udacity Github site, get the `https` link from the forked repository.
 
-- Switch to your Github site, get the `https` link from the forked repository.
 ![Get HTTPS link](./images/https_link.png)
 
-- 
+Locate to where you want to clone the repository on your local computer:
+```
+git clone <https links>
+git pull origin main
+```
+
+### Create Azure service principle for deployment
+Login to `az` CLI, then run following commands:
+```
+
+```
