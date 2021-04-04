@@ -1,70 +1,66 @@
-resource "azurerm_resource_group" "main" {
-  name     = "${var.prefix}-resources"
-  location = "East US"
-}
-
-resource "azurerm_virtual_network" "main" {
-  name                = "${var.prefix}-network"
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
-}
-
-resource "azurerm_subnet" "internal" {
-  name                 = "internal"
-  resource_group_name  = azurerm_resource_group.main.name
-  virtual_network_name = azurerm_virtual_network.main.name
-  address_prefixes     = ["10.0.2.0/24"]
-}
-
-resource "azurerm_network_interface" "main" {
-  name                = "${var.prefix}-nic"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
-
-  ip_configuration {
-    name                          = "testconfiguration1"
-    subnet_id                     = azurerm_subnet.internal.id
-    private_ip_address_allocation = "Dynamic"
+# We strongly recommend using the required_providers block to set the
+# Azure Provider source and version being used
+terraform {
+  required_providers {
+    vault = {
+      source = "hashicorp/vault"
+      version = "=2.19.0"
+    }
   }
 }
 
-data "azurerm_image" "webPackerImage" {
-  name = "webPackerImage"
-  resource_group_name = "scalable-iaas"
+# module "azure_initialization" {
+#   source          = "./modules/initialization"
+
+#   # Initial variables
+#   tenant_id       = var.tenant_id
+#   subscription_id = var.subscription_id
+#   user_id         = var.user_id
+#   user_secret     = var.user_secret
+#   rg_region       = "Southeast Asia"
+# }
+
+#### Uncomment the following script if you use Hashicorp Vault for storing your secrets ####
+# Configure the Hashicorp Vault provider
+provider "vault" {
+  # It is strongly recommended to configure this provider through the
+  # environment variables described above, so that each user can have
+  # separate credentials set in the environment.
+  #
+  # This will default to use $VAULT_ADDR and $VAULT_TOKEN
 }
 
-resource "azurerm_virtual_machine" "main" {
-  name                  = "${var.prefix}-vm"
-  location              = azurerm_resource_group.main.location
-  resource_group_name   = azurerm_resource_group.main.name
-  network_interface_ids = [azurerm_network_interface.main.id]
-  vm_size               = "Standard_DS1_v2"
+data "vault_generic_secret" "service_principle" {
+  path = "azure/service_test"
+}
 
-  # Uncomment this line to delete the OS disk automatically when deleting the VM
-  delete_os_disk_on_termination = true
+module "azure_init" {
+  source          = "./modules/init"
 
-  # Uncomment this line to delete the data disks automatically when deleting the VM
-  delete_data_disks_on_termination = true
+  # Initial variables
+  tenant_id       = data.vault_generic_secret.service_principle.data["tenant"]
+  subscription_id = data.vault_generic_secret.service_principle.data["subscription"]
+  user_id         = data.vault_generic_secret.service_principle.data["appId"]
+  user_secret     = data.vault_generic_secret.service_principle.data["password"]
+  rg_region       = "Southeast Asia"
+  prefix          = "udacity_project"
+}
 
-  storage_image_reference {
-    id = data.azurerm_image.webPackerImage.id
-  }
-  storage_os_disk {
-    name              = "myosdisk1"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
-  }
-  os_profile {
-    computer_name  = var.hostname
-    admin_username = var.host_username
-    admin_password = var.host_password
-  }
-  os_profile_linux_config {
-    disable_password_authentication = false
-  }
-  tags = {
-    environment = "staging"
-  }
+module "azure_avset" {
+  source = "./modules/avset"
+
+  # Initial variables
+  tenant_id         = data.vault_generic_secret.service_principle.data["tenant"]
+  subscription_id   = data.vault_generic_secret.service_principle.data["subscription"]
+  user_id           = data.vault_generic_secret.service_principle.data["appId"]
+  user_secret       = data.vault_generic_secret.service_principle.data["password"]
+  rg_region         = "Southeast Asia"
+  prefix            = "udacity_project"
+  vm_count          = 3
+  admin_username    = var.admin_username
+  admin_password    = var.admin_password
+
+  current_rg_name   = module.azure_init.current_rg_name
+  current_rg_region = module.azure_init.current_rg_region
+  current_nsg_id    = module.azure_init.current_nsg_id
 }
