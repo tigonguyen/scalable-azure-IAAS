@@ -8,24 +8,30 @@ udacity_project
 |   README.md
 |   tree.txt
 |   
-+---packer  # This contains pakcer template 
-|       web-server.json
++---images
+|       https_link.png
+|       
++---packer
+|       web-server-env.json
+|       web-server-vault.json
+|       
++---policy
+|       tagging.json
 |       
 \---terraform
-    |   main.tf 
+    |   main.tf
     |   variables.tf
     |   
-    \---modules # This contains reusable modules
-        +---avset # Module for deploying avset
+    \---modules
+        +---avset
         |       main.tf
         |       variables.tf
         |       
-        \---init # Module for deploying initial resources
+        \---init
                 main.tf
                 outputs.tf
                 variables.tf
 ```
-### Project diagram
 
 ## Instruction
 ### Clone the repository
@@ -127,4 +133,6 @@ Navigate to the `terraform` directory, then run following commands:
 terraform init
 terraform plan
 terraform apply
+## Then, destroy the created system
+terraform destroy
 ```

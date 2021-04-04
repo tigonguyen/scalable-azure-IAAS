@@ -21,8 +21,12 @@
         "image_offer": "UbuntuServer",
         "image_sku": "16.04-LTS",
 
-        "location": "East US",
-        "vm_size": "Standard_DS2_v2"
+        "location": "Southeast Asia",
+        "vm_size": "Standard_DS2_v2",
+		"azure_tags": {
+			"project": "Udacity Azure",
+			"os": "Linux"
+		}
 	}],
 	"provisioners": [{
 		"inline": [
