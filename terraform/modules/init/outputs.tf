@@ -9,3 +9,7 @@ output "current_rg_region" {
 output "current_nsg_id" {
   value = azurerm_network_security_group.main.id
 }
+
+output "current_subnet_id" {
+  value = azurerm_subnet.main.id
+}

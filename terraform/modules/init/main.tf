@@ -29,6 +29,14 @@ resource "azurerm_virtual_network" "main" {
   address_space       = [ "10.0.0.0/16" ]
 }
 
+# Create a subnet
+resource "azurerm_subnet" "main" {
+  name                 = "${var.prefix}_subnet"
+  resource_group_name  = azurerm_resource_group.main.name
+  virtual_network_name = azurerm_virtual_network.main.name
+  address_prefixes     = ["10.0.1.0/24"]
+}
+
 # Create network security group
 resource "azurerm_network_security_group" "main" {
   name                = "${var.prefix}_nsg"
@@ -42,8 +50,8 @@ resource "azurerm_network_security_group" "main" {
     protocol                   = "*"
     source_port_range          = "*"
     destination_port_range     = "*"
-    source_address_prefix      = "VNet"
-    destination_address_prefix = "VNet"
+    source_address_prefix      = "Internet"
+    destination_address_prefix = "VirtualNetwork"
   }
   security_rule {
     name                       = "${var.prefix}_allowVNet-Outbound"
@@ -53,7 +61,7 @@ resource "azurerm_network_security_group" "main" {
     protocol                   = "*"
     source_port_range          = "*"
     destination_port_range     = "*"
-    source_address_prefix      = "VNet"
-    destination_address_prefix = "VNet"
+    source_address_prefix      = "VirtualNetwork"
+    destination_address_prefix = "Internet"
   }
 }

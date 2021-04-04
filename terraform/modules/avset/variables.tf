@@ -58,3 +58,8 @@ variable "current_nsg_id" {
   description = "ID of the current NSG"
   type        = string
 }
+
+variable "current_subnet_id" {
+  description = "Network ID in the current project"
+  type        = string
+}

@@ -24,6 +24,7 @@ resource "azurerm_network_interface" "main" {
 
   ip_configuration {
     name                          = "internal"
+    subnet_id                     = var.current_subnet_id
     private_ip_address_allocation = "Dynamic"
   }
 }
@@ -87,10 +88,10 @@ data "azurerm_image" "main" {
 # Create VMs in the avset
 resource "azurerm_linux_virtual_machine" "main" {
   count                           = var.vm_count
-  name                            = "${var.prefix}-${count.index}-vm"
+  name                            = "vm-${count.index}"
   resource_group_name             = var.current_rg_name
   location                        = var.current_rg_region
-  size                            = "Standard_A2"
+  size                            = "Standard_DS1_v2"
   availability_set_id             = azurerm_availability_set.main.id
   admin_username                  = var.admin_username
   admin_password                  = var.admin_password

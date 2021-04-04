@@ -71,17 +71,18 @@ module "azure_avset" {
   source = "./modules/avset"
 
   # Initial variables
-  tenant_id         = data.vault_generic_secret.service_principle.data["tenant"]
-  subscription_id   = data.vault_generic_secret.service_principle.data["subscription"]
-  user_id           = data.vault_generic_secret.service_principle.data["appId"]
-  user_secret       = data.vault_generic_secret.service_principle.data["password"]
-  rg_region         = "Southeast Asia"
-  prefix            = "udacity_project"
-  vm_count          = 3
-  admin_username    = var.admin_username
-  admin_password    = var.admin_password
+  tenant_id          = data.vault_generic_secret.service_principle.data["tenant"]
+  subscription_id    = data.vault_generic_secret.service_principle.data["subscription"]
+  user_id            = data.vault_generic_secret.service_principle.data["appId"]
+  user_secret        = data.vault_generic_secret.service_principle.data["password"]
+  rg_region          = "Southeast Asia"
+  prefix             = "udacity_project"
+  vm_count           = 3
+  admin_username     = var.admin_username
+  admin_password     = var.admin_password
 
-  current_rg_name   = module.azure_init.current_rg_name
-  current_rg_region = module.azure_init.current_rg_region
-  current_nsg_id    = module.azure_init.current_nsg_id
+  current_rg_name    = module.azure_init.current_rg_name
+  current_rg_region  = module.azure_init.current_rg_region
+  current_nsg_id     = module.azure_init.current_nsg_id
+  current_subnet_id  = module.azure_init.current_subnet_id
 }
