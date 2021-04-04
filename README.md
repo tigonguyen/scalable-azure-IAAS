@@ -60,3 +60,18 @@ These values map to the Terraform variables like so:
 - `appId` is the `client_id` defined in Packer template.
 - `password` is the `client_secret` defined in Packer template.
 - `tenant` is the `tenant_id` defined in Packer template.
+
+### Deployment of tagging Policy
+### Packer
+Create a resource group for containing `packer image`
+```
+az group create --location southeastasia --name scalable-iaas
+```
+Here, we have 2 cases:
+- If you have your own `Vault` server for storing secrets, you can use `web-server-vault.json` template for building the image. Rememmber, `VAULT_ADDR` and `VAULT_TOKEN` are required to be configured first.
+```
+## On windows systems
+$env:VAULT_ADDR="<YOUR-VAULT-SERVER-ADDRESS>"
+$env:VAULT_TOKEN="<YOUR-ACCESS-TOKEN>"
+```
+- You can set the 
