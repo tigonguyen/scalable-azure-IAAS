@@ -3,7 +3,7 @@
 ## Getting started
 ### Directory structure
 ```
-availability_set
+udacity_project
 |   .gitignore
 |   README.md
 |   tree.txt
@@ -25,7 +25,7 @@ availability_set
                 outputs.tf
                 variables.tf
 ```
-### Diagram
+### Project diagram
 
 ## Instruction
 ### Clone the repository
@@ -62,6 +62,13 @@ These values map to the Terraform variables like so:
 - `tenant` is the `tenant_id` defined in Packer template.
 
 ### Deployment of tagging Policy
+Define `tagging.json` policy file, then use follwing commands for assign the policy to resource group. Here, we just test with ther RG which contains Packer images.
+```
+az policy definition create --name tagging --rules <PATH-JSON-POLICY> --subscription <SUBSCRIPTION-NAME>
+## Store the ID to the $varid
+varid=<POLICY-ID>
+az policy assignment create --name 'tagging-assignment' --resource-group <RG-NAME> --policy $varid
+```
 
 ### Packer
 Create a resource group for containing `packer image`
@@ -111,7 +118,7 @@ terraform
 ```
 Here, 2 modules have been includes:
 - `init` module defines `resource_group` and `network` configurations which are using entire the project.
-- `avset` modules defines components which make up an `availability_set`. You can decide how many instances place in your set via `vm_count` variables. Besides, `admin_username` and `admin_password`, which are used for authenticating on the VMs, are required to be configured.
+- `avset` module defines components which make up an `availability_set`. You can decide how many instances place in your set via `vm_count` variables. Besides, `admin_username` and `admin_password`, which are used for authenticating on the VMs, are required to be configured.
 
 `./terraform/main.tf` contains 2 options that you can choose by yourselft, deploying entire project with secrets stored on `Vault` server or `./terraform/variables.tf` file.
 
