@@ -69,7 +69,7 @@ Create a resource group for containing `packer image`
 az group create --location southeastasia --name scalable-iaas
 ```
 Here, we have 2 cases:
-- If you have your own `Vault` server for storing secrets, you can use `web-server-vault.json` template for building image. Rememmber, `VAULT_ADDR` and `VAULT_TOKEN` are required to be configured first.
+- If you have your own `Vault` server for storing secrets, you can use `web-server-vault.json` template for building image. Rememmber, `VAULT_ADDR` and `VAULT_TOKEN` environment variables are required to be configured first.
 ```
 ## On windows systems
 $env:VAULT_ADDR="<YOUR-VAULT-SERVER-ADDRESS>"
@@ -93,3 +93,23 @@ az image list
 ```
 
 ### Terraform
+Structure of `terraform` directory:
+```
+terraform
+|   main.tf
+|   tree.txt
+|   variables.tf
+|   
+\---modules
+    +---avset
+    |       main.tf
+    |       variables.tf
+    |       
+    \---init
+            main.tf
+            outputs.tf
+            variables.tf
+```
+Here, 2 modules have been includes:
+- `init` module defines `resource_group` and `network` configurations which are using entire the project.
+- `avset` modules defines components which make up an `availability_set`. You can decide how many instances place in your set via `vm_count` variables. Besides, `admin_username` and `admin_password`, which are used for authenticating on the VMs, are required to be configured.
