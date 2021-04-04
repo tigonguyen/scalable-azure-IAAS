@@ -30,3 +30,9 @@ availability_set
 ## Instruction
 ### Clone the repository
 - `Fork` the Udacity repository from Github page.
+![Fork the repository](./images/fork_repos.png)
+
+- Switch to your Github site, get the `https` link from the forked repository.
+![Get HTTPS link](./images/https_link.png)
+
+- 
