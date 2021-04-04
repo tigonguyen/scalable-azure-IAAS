@@ -114,3 +114,10 @@ Here, 2 modules have been includes:
 - `avset` modules defines components which make up an `availability_set`. You can decide how many instances place in your set via `vm_count` variables. Besides, `admin_username` and `admin_password`, which are used for authenticating on the VMs, are required to be configured.
 
 `./terraform/main.tf` contains 2 options that you can choose by yourselft, deploying entire project with secrets stored on `Vault` server or `./terraform/variables.tf` file.
+
+Navigate to the `terraform` directory, then run following commands:
+```
+terraform init
+terraform plan
+terraform apply
+```
